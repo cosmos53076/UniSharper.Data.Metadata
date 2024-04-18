@@ -26,6 +26,8 @@ namespace UniSharperEditor.Data.Metadata
     {
         private const string UnityPackageName = "io.github.idreamsofgame.unisharper.data.metadata";
 
+        private const string DatabaseAssetFileExtension = FileExtensions.DatabaseFile + FileExtensions.UnityBinaryAssetFile;
+
         private static string tempFolderPath;
 
         private static string TempFolderPath
@@ -56,7 +58,11 @@ namespace UniSharperEditor.Data.Metadata
             FindChangedExcelWorkbookFiles(out var addedExcelFiles, out var updatedExcelFiles, out var deletedExcelFiles);
 
             var dbFolderPath = EditorPath.GetFullPath(settings.MetadataPersistentStorePath);
-            ForEachExcelFile(settings.ExcelWorkbookFilesFolderPath, (table, fileName, index, length) =>
+            ForEachExcelFile(settings.ExcelWorkbookFilesFolderPath,
+                (table,
+                    fileName,
+                    index,
+                    length) =>
                 {
                     if (table == null)
                         return;
@@ -117,7 +123,11 @@ namespace UniSharperEditor.Data.Metadata
                 // Try delete redundant entity scripts.
                 TryDeleteMetadataEntityScripts(settings, deletedExcelFiles);
 
-                ForEachExcelFile(settings.ExcelWorkbookFilesFolderPath, (table, name, index, length) =>
+                ForEachExcelFile(settings.ExcelWorkbookFilesFolderPath,
+                    (table,
+                        name,
+                        index,
+                        length) =>
                     {
                         if (table == null)
                             return;
@@ -204,8 +214,8 @@ namespace UniSharperEditor.Data.Metadata
         {
             var sourceFilePath = PathUtility.UnifyToAltDirectorySeparatorChar(Path.Combine(TempFolderPath, $"db{dbLocalAddress}.box"));
             var newFileName = dbLocalAddress > 1
-                ? $"{entityName}{FileExtensions.DatabaseFile}{FileExtensions.UnityBinaryFile}"
-                : $"{nameof(MetadataEntityDBConfig)}{FileExtensions.DatabaseFile}{FileExtensions.UnityBinaryFile}";
+                ? $"{entityName}{DatabaseAssetFileExtension}"
+                : $"{nameof(MetadataEntityDBConfig)}{DatabaseAssetFileExtension}";
             var destFilePath = PathUtility.UnifyToAltDirectorySeparatorChar(Path.Combine(dbFolderPath, newFileName));
             FileUtil.ReplaceFile(sourceFilePath, destFilePath);
             EncryptFileRawData(destFilePath);
@@ -607,7 +617,7 @@ namespace UniSharperEditor.Data.Metadata
                 return;
 
             // Plan B: Try delete file by using class FileUtil.
-            databaseFilePath = $"{databaseFilePath}{FileExtensions.UnityBinaryFile}";
+            databaseFilePath = $"{databaseFilePath}{FileExtensions.UnityBinaryAssetFile}";
             var scriptMetaFilePath = $"{databaseFilePath}{FileExtensions.UnityMetaFile}";
             FileUtil.DeleteFileOrDirectory(databaseFilePath);
             FileUtil.DeleteFileOrDirectory(scriptMetaFilePath);
