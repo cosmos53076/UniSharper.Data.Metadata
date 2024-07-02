@@ -24,7 +24,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.2.1",
+      "version": "3.1.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -51,27 +51,27 @@
       }
     },
     "io.github.idreamsofgame.resharp.core": {
-      "version": "1.4.8",
+      "version": "1.4.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "io.github.idreamsofgame.resharp.data.iboxdb": {
-      "version": "2.0.2",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "io.github.idreamsofgame.unisharper.core": {
-      "version": "1.21.6",
+      "version": "1.22.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.1.0",
         "jillejr.newtonsoft.json-for-unity.converters": "1.6.3",
-        "io.github.idreamsofgame.resharp.core": "1.4.8"
+        "io.github.idreamsofgame.resharp.core": "1.4.9"
       },
       "url": "https://package.openupm.com"
     },
@@ -199,18 +199,6 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.uielementsnative": "1.0.0"
-      }
-    },
-    "com.unity.modules.uielementsnative": {
-      "version": "1.0.0",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       }

@@ -63,7 +63,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Vector2 Value
 		/// </summary>
-		public Vector2 Vector2Sample => new(Vector2SampleValue[0], Vector2SampleValue[1]);
+		public Vector2 Vector2Sample => new Vector2(Vector2SampleValue[0], Vector2SampleValue[1]);
 
 		/// <summary>
 		/// Vector2Int Value
@@ -73,7 +73,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Vector2Int Value
 		/// </summary>
-		public Vector2Int Vector2IntSample => new(Vector2IntSampleValue[0], Vector2IntSampleValue[1]);
+		public Vector2Int Vector2IntSample => new Vector2Int(Vector2IntSampleValue[0], Vector2IntSampleValue[1]);
 
 		/// <summary>
 		/// Vector3 Value
@@ -83,7 +83,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Vector3 Value
 		/// </summary>
-		public Vector3 Vector3Sample => new(Vector3SampleValue[0], Vector3SampleValue[1], Vector3SampleValue[2]);
+		public Vector3 Vector3Sample => new Vector3(Vector3SampleValue[0], Vector3SampleValue[1], Vector3SampleValue[2]);
 
 		/// <summary>
 		/// Vector3Int Value
@@ -93,7 +93,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Vector3Int Value
 		/// </summary>
-		public Vector3Int Vector3IntSample => new(Vector3IntSampleValue[0], Vector3IntSampleValue[1], Vector3IntSampleValue[2]);
+		public Vector3Int Vector3IntSample => new Vector3Int(Vector3IntSampleValue[0], Vector3IntSampleValue[1], Vector3IntSampleValue[2]);
 
 		/// <summary>
 		/// Vector4 Value
@@ -103,7 +103,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Vector4 Value
 		/// </summary>
-		public Vector4 Vector4Sample => new(Vector4SampleValue[0], Vector4SampleValue[1], Vector4SampleValue[2], Vector4SampleValue[3]);
+		public Vector4 Vector4Sample => new Vector4(Vector4SampleValue[0], Vector4SampleValue[1], Vector4SampleValue[2], Vector4SampleValue[3]);
 
 		/// <summary>
 		/// RangeInt Value
@@ -113,7 +113,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// RangeInt Value
 		/// </summary>
-		public RangeInt RangeIntSample => new(RangeIntSampleValue[0], RangeIntSampleValue[1]);
+		public RangeInt RangeIntSample => new RangeInt(RangeIntSampleValue[0], RangeIntSampleValue[1]);
 
 		/// <summary>
 		/// Quaternion Value
@@ -123,7 +123,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Quaternion Value
 		/// </summary>
-		public Quaternion QuaternionSample => new(QuaternionSampleValue[0], QuaternionSampleValue[1], QuaternionSampleValue[2], QuaternionSampleValue[3]);
+		public Quaternion QuaternionSample => new Quaternion(QuaternionSampleValue[0], QuaternionSampleValue[1], QuaternionSampleValue[2], QuaternionSampleValue[3]);
 
 		/// <summary>
 		/// Rect Value
@@ -133,7 +133,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Rect Value
 		/// </summary>
-		public Rect RectSample => new(RectSampleValue[0], RectSampleValue[1], RectSampleValue[2], RectSampleValue[3]);
+		public Rect RectSample => new Rect(RectSampleValue[0], RectSampleValue[1], RectSampleValue[2], RectSampleValue[3]);
 
 		/// <summary>
 		/// RectInt Value
@@ -143,7 +143,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// RectInt Value
 		/// </summary>
-		public RectInt RectIntSample => new(RectIntSampleValue[0], RectIntSampleValue[1], RectIntSampleValue[2], RectIntSampleValue[3]);
+		public RectInt RectIntSample => new RectInt(RectIntSampleValue[0], RectIntSampleValue[1], RectIntSampleValue[2], RectIntSampleValue[3]);
 
 		/// <summary>
 		/// Color Value
@@ -153,7 +153,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Color Value
 		/// </summary>
-		public Color ColorSample => new(ColorSampleValue[0], ColorSampleValue[1], ColorSampleValue[2], ColorSampleValue[3]);
+		public Color ColorSample => new Color(ColorSampleValue[0], ColorSampleValue[1], ColorSampleValue[2], ColorSampleValue[3]);
 
 		/// <summary>
 		/// Color32 Value
@@ -163,7 +163,7 @@ namespace UniSharper.Data.Metadata.Samples
 		/// <summary>
 		/// Color32 Value
 		/// </summary>
-		public Color32 Color32Sample => new(Color32SampleValue[0], Color32SampleValue[1], Color32SampleValue[2], Color32SampleValue[3]);
+		public Color32 Color32Sample => new Color32(Color32SampleValue[0], Color32SampleValue[1], Color32SampleValue[2], Color32SampleValue[3]);
 
 		/// <summary>
 		/// Vector2 Array Value
