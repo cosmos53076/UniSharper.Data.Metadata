@@ -2,8 +2,8 @@
 	"name": "io.github.idreamsofgame.unisharper.data.metadata",
 	"displayName": "UniSharper.Data.Metadata",
 	"description": "UniSharper.Data.Metadata is a library for converting data in excel files, and read them at runtime in Unity Engine.",
-	"version": "2.5.11",
-	"unity": "2018.3",
+	"version": "2.5.12",
+	"unity": "2019.4",
 	"author": {
 		"name": "iDreamsOfGame",
 		"url": "https://github.com/iDreamsOfGame"
@@ -11,8 +11,8 @@
 	"license": "MIT",
 	"dependencies": 
 	{
-		"io.github.idreamsofgame.unisharper.core": "1.21.6",
-    	"io.github.idreamsofgame.resharp.data.iboxdb": "2.0.2",
+		"io.github.idreamsofgame.unisharper.core": "1.22.6",
+    	"io.github.idreamsofgame.resharp.data.iboxdb": "2.0.3",
     	"com.github.exceldatareader.exceldatareader": "3.6.0"
 	}
 }

@@ -10,7 +10,7 @@ namespace UniSharperEditor.Data.Metadata
 {
     internal class PropertyTypeConverterFactory : CachingFactoryTemplate<PropertyTypeConverterFactory, string, IPropertyTypeConverter>
     {
-        private static readonly Dictionary<string, Type> PropertyTypeConverterTypeMap = new()
+        private static readonly Dictionary<string, Type> PropertyTypeConverterTypeMap = new Dictionary<string, Type>()
         {
             { PropertyTypeNames.String, typeof(PropertyTypeConverter) },
             { PropertyTypeNames.Boolean, typeof(BooleanTypeConverter) },

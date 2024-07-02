@@ -23,21 +23,23 @@ namespace UniSharperEditor.Data.Metadata.PropertyStringEditors
                 .Append(PlayerEnvironment.WindowsNewLine);
             
             // Add Unity type property
-            var value = GenerateValueString(valuePropertyName, numberOfConstructorParameters);
+            var value = GenerateValueString(propertyType, valuePropertyName, numberOfConstructorParameters);
             stringBuilder.AppendFormat(ScriptTemplate.ClassMemberFormatString.ExpressionBodiedGetterProperty, rawInfo.Comment, propertyType, propertyName, value);
         }
 
-        private string GenerateValueString(string valuePropertyName, int numberOfConstructorParameters)
+        private static string GenerateValueString(string propertyType, string valuePropertyName, int numberOfConstructorParameters)
         {
-            var valueStringBuilder = new StringBuilder("new(");
+            var valueStringBuilder = new StringBuilder("new ")
+                .Append(propertyType)
+                .Append("(");
             for (var i = 0; i < numberOfConstructorParameters; i++)
             {
-                valueStringBuilder.AppendFormat($"{valuePropertyName}[{i}]");
+                valueStringBuilder.Append($"{valuePropertyName}[{i}]");
                 if (i < numberOfConstructorParameters - 1)
-                    valueStringBuilder.AppendFormat(", ");
+                    valueStringBuilder.Append(", ");
             }
 
-            valueStringBuilder.AppendFormat(")");
+            valueStringBuilder.Append(")");
             return valueStringBuilder.ToString();
         }
     }

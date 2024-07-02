@@ -146,29 +146,33 @@ namespace UniSharper.Data.Metadata
                 return;
             }
 
-            using var dataDBAdapter = new IBoxDBAdapter(dbRawData);
-            var tableName = entityType.Name;
-            var primaryKeyName = GetMetadataEntityDBPrimaryKey<T>();
-            dataDBAdapter.EnsureTable<T>(tableName, primaryKeyName);
-            dataDBAdapter.Open();
-            handler?.Invoke(dataDBAdapter);
+            using (var dataDBAdapter = new IBoxDBAdapter(dbRawData))
+            {
+                var tableName = entityType.Name;
+                var primaryKeyName = GetMetadataEntityDBPrimaryKey<T>();
+                dataDBAdapter.EnsureTable<T>(tableName, primaryKeyName);
+                dataDBAdapter.Open();
+                handler?.Invoke(dataDBAdapter);
+            }
         }
 
         private byte[] DecryptDatabaseFile(byte[] fileData)
         {
-            using var reader = new BinaryReader(new MemoryStream(fileData));
-            var dataEncryptionFlagRawData = reader.ReadBytes(1);
-            var dataEncryptionFlag = BitConverter.ToBoolean(dataEncryptionFlagRawData, 0);
+            using (var reader = new BinaryReader(new MemoryStream(fileData)))
+            {
+                var dataEncryptionFlagRawData = reader.ReadBytes(1);
+                var dataEncryptionFlag = BitConverter.ToBoolean(dataEncryptionFlagRawData, 0);
 
-            if (dataEncryptionFlag)
-            {
-                var key = reader.ReadBytes(EncryptionKeyLength);
-                var cipherData = reader.ReadBytes(fileData.Length - dataEncryptionFlagRawData.Length - EncryptionKeyLength);
-                return CryptoUtility.AesDecrypt(cipherData, key);
-            }
-            else
-            {
-                return reader.ReadBytes(fileData.Length - dataEncryptionFlagRawData.Length);
+                if (dataEncryptionFlag)
+                {
+                    var key = reader.ReadBytes(EncryptionKeyLength);
+                    var cipherData = reader.ReadBytes(fileData.Length - dataEncryptionFlagRawData.Length - EncryptionKeyLength);
+                    return CryptoUtility.AesDecrypt(cipherData, key);
+                }
+                else
+                {
+                    return reader.ReadBytes(fileData.Length - dataEncryptionFlagRawData.Length);
+                }
             }
         }
 

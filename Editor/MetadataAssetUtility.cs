@@ -309,26 +309,28 @@ namespace UniSharperEditor.Data.Metadata
             var settings = MetadataAssetSettings.Load();
             var rawData = File.ReadAllBytes(filePath);
             var dataEncryptionFlag = BitConverter.GetBytes(settings.DataEncryptionAndDecryption);
-            using var writer = new BinaryWriter(new MemoryStream());
-            // Write flag to judge if data need to decryption
-            writer.Write(dataEncryptionFlag);
-
-            if (settings.DataEncryptionAndDecryption)
+            using (var writer = new BinaryWriter(new MemoryStream()))
             {
-                // Write key and cipher data
-                var key = CryptoUtility.GenerateRandomKey(MetadataManager.EncryptionKeyLength);
-                var cipherData = CryptoUtility.AesEncrypt(rawData, key);
-                writer.Write(key);
-                writer.Write(cipherData);
-            }
-            else
-            {
-                // Write raw data
-                writer.Write(rawData);
-            }
+                // Write flag to judge if data need to decryption
+                writer.Write(dataEncryptionFlag);
 
-            var bufferData = ((MemoryStream)writer.BaseStream).GetBuffer();
-            File.WriteAllBytes(filePath, bufferData);
+                if (settings.DataEncryptionAndDecryption)
+                {
+                    // Write key and cipher data
+                    var key = CryptoUtility.GenerateRandomKey(MetadataManager.EncryptionKeyLength);
+                    var cipherData = CryptoUtility.AesEncrypt(rawData, key);
+                    writer.Write(key);
+                    writer.Write(cipherData);
+                }
+                else
+                {
+                    // Write raw data
+                    writer.Write(rawData);
+                }
+
+                var bufferData = ((MemoryStream)writer.BaseStream).GetBuffer();
+                File.WriteAllBytes(filePath, bufferData);
+            }
         }
 
         private static void ForEachExcelFile(string excelFilesFolderPath, Action<DataTable, string, int, int> action)
@@ -353,31 +355,34 @@ namespace UniSharperEditor.Data.Metadata
                 var path = paths[i];
                 var fileName = Path.GetFileName(path);
 
-                using var stream = File.OpenRead(path);
-
-                try
+                using (var stream = File.OpenRead(path))
                 {
-                    using var reader = ExcelReaderFactory.CreateReader(stream);
-                    if (reader != null)
+                    try
                     {
-                        var result = reader.AsDataSet();
-                        if (result is { Tables: { Count: > 0 } })
+                        using (var reader = ExcelReaderFactory.CreateReader(stream))
                         {
-                            var table = result.Tables[0];
-                            if (table != null)
-                                action?.Invoke(table, fileName, i, paths.Length);
-                        }
-                        else
-                        {
-                            UnityDebug.LogError("Excel file should have a table at least!");
+                            if (reader != null)
+                            {
+                                var result = reader.AsDataSet();
+                                if (result != null && result.Tables.Count > 0)
+                                {
+                                    var table = result.Tables[0];
+                                    if (table != null)
+                                        action?.Invoke(table, fileName, i, paths.Length);
+                                }
+                                else
+                                {
+                                    UnityDebug.LogError("Excel file should have a table at least!");
+                                }
+                            }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    UnityDebug.LogError($"fileName: {fileName}, error: {e}");
-                    EditorUtility.ClearProgressBar();
-                    throw;
+                    catch (Exception e)
+                    {
+                        UnityDebug.LogError($"fileName: {fileName}, error: {e}");
+                        EditorUtility.ClearProgressBar();
+                        throw;
+                    }
                 }
             }
         }
@@ -399,7 +404,8 @@ namespace UniSharperEditor.Data.Metadata
             foreach (var rawInfo in rawInfoList.Where(rowInfo => rowInfo.PropertyType.Equals(PropertyTypeNames.Enum)))
             {
                 var enumValuesString = new StringBuilder();
-                if (rawInfo.Parameters[2] is not string[] enumValueList)
+                var enumValueList = rawInfo.Parameters[2] as string[];
+                if (enumValueList == null)
                     continue;
 
                 for (var j = 0; j < enumValueList.Length; j++)
@@ -535,39 +541,43 @@ namespace UniSharperEditor.Data.Metadata
             var dbLocalAddress = index + 2L;
             const string dbName = nameof(MetadataEntityDBConfig);
 
-            using var dbAdapter = new IBoxDBAdapter(TempFolderPath, MetadataEntityDBConfig.DatabaseLocalAddress);
-            dbAdapter.EnsureTable<MetadataEntityDBConfig>(dbName, MetadataEntityDBConfig.TablePrimaryKey);
-            dbAdapter.Open();
-            var tablePrimaryKey = rowInfos[0].PropertyName;
-            var success = dbAdapter.Insert(new MetadataEntityDBConfig(tableName, tablePrimaryKey));
-
-            if (!success)
-                return;
-
-            var dataList = new T[entityDataList.Count];
-
-            for (var i = 0; i < entityDataList.Count; i++)
+            using (var dbAdapter = new IBoxDBAdapter(TempFolderPath, MetadataEntityDBConfig.DatabaseLocalAddress))
             {
-                dataList[i] = (T)entityDataList[i];
-            }
+                dbAdapter.EnsureTable<MetadataEntityDBConfig>(dbName, MetadataEntityDBConfig.TablePrimaryKey);
+                dbAdapter.Open();
+                var tablePrimaryKey = rowInfos[0].PropertyName;
+                var success = dbAdapter.Insert(new MetadataEntityDBConfig(tableName, tablePrimaryKey));
 
-            using var dataDBAdapter = new IBoxDBAdapter(TempFolderPath, dbLocalAddress);
-            dataDBAdapter.EnsureTable<T>(typeof(T).Name, tablePrimaryKey);
-            dataDBAdapter.Open();
+                if (!success)
+                    return;
 
-            foreach (var data in dataList)
-            {
-                var result = dataDBAdapter.Insert(tableName, data);
+                var dataList = new T[entityDataList.Count];
 
-                if (!result)
+                for (var i = 0; i < entityDataList.Count; i++)
                 {
-                    UnityDebug.LogWarning($"Can not write metadata ({data}) into database file: {tableName}!");
+                    dataList[i] = (T)entityDataList[i];
+                }
+
+                using (var dataDBAdapter = new IBoxDBAdapter(TempFolderPath, dbLocalAddress))
+                {
+                    dataDBAdapter.EnsureTable<T>(typeof(T).Name, tablePrimaryKey);
+                    dataDBAdapter.Open();
+
+                    foreach (var data in dataList)
+                    {
+                        var result = dataDBAdapter.Insert(tableName, data);
+
+                        if (!result)
+                        {
+                            UnityDebug.LogWarning($"Can not write metadata ({data}) into database file: {tableName}!");
+                        }
+                    }
+
+                    // Copy metadata entity database file.
+                    if (updateDatabaseFile)
+                        CopyMetadataDatabaseFile(dbFolderPath, dbLocalAddress, tableName);
                 }
             }
-
-            // Copy metadata entity database file.
-            if (updateDatabaseFile)
-                CopyMetadataDatabaseFile(dbFolderPath, dbLocalAddress, tableName);
         }
 
         private static void TryDeleteMetadataEntityScripts(MetadataAssetSettings settings, List<string> deletedExcelFiles)
